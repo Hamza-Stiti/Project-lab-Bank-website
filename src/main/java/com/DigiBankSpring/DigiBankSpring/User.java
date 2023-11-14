@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "USER")
@@ -27,5 +28,10 @@ public class User {
 
     @Column(name = "DOB")
     private Date DOB;
+
+
+    @OneToMany
+    @JoinColumn(name = "USER_ID")
+    private List<Currency> currency;
 
 }

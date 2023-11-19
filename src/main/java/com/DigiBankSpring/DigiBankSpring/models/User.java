@@ -3,6 +3,7 @@ package com.DigiBankSpring.DigiBankSpring.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
@@ -10,11 +11,9 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 @Data
+@NoArgsConstructor
 public class User
 {
-    public User()
-    { }
-
     public User(String name, String email, String password, Date DOB)
     {
         this.name = name;

@@ -11,4 +11,9 @@ public class DigiBankSpringApplication
     {
         SpringApplication.run(DigiBankSpringApplication.class, args);
     }
+
+    @GetMapping("/")
+    public String test() {
+        return "authenticated";
+    }
 }

@@ -7,10 +7,8 @@ import com.DigiBankSpring.DigiBankSpring.security.JwtIssuer;
 import com.DigiBankSpring.DigiBankSpring.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -28,7 +26,7 @@ public class AuthController
         Optional<Long> id = userService.findUserByEmailAndPassword(request.getEmail(), request.getPassword());
         if (id.isEmpty()) return ResponseEntity.badRequest().body(LoginResponse.builder().error("Invalid credentials").build());
 
-        String token = jwtIssuer.issue(1, request.getEmail());
+        String token = jwtIssuer.issue(id.get(), request.getEmail());
         return ResponseEntity.ok(LoginResponse.builder().accessToken(token).build());
     }
 

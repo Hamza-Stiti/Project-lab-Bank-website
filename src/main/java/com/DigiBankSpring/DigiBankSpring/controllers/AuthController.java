@@ -39,4 +39,9 @@ public class AuthController
         String token = jwtIssuer.issue(id.get(), request.getEmail());
         return ResponseEntity.ok(LoginResponse.builder().accessToken(token).build());
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "authenticated";
+    }
 }

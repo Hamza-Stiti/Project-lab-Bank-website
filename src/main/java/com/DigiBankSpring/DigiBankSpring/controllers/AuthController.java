@@ -33,7 +33,7 @@ public class AuthController
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request)
     {
-        Optional<Long> id = userService.createNewUser(request.getName(), request.getEmail(), request.getPassword(), request.getDOB());
+        Optional<Long> id = userService.createNewUser(request.getName(), request.getEmail(), request.getPassword(), request. getDOB());
         if (id.isEmpty()) return ResponseEntity.badRequest().body(LoginResponse.builder().error("Email already exists").build());
 
         String token = jwtIssuer.issue(id.get(), request.getEmail());

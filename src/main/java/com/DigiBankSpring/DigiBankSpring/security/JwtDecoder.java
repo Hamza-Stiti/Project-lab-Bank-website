@@ -16,4 +16,9 @@ public class JwtDecoder
     {
         return JWT.require(Algorithm.HMAC256(properties.getKey())).build().verify(token);
     }
+
+    public String getUserIdFromAuthHeader(String authHeader) {
+        String token = authHeader.split(" ")[1];
+        return decodedToken(token).getSubject();
+    }
 }

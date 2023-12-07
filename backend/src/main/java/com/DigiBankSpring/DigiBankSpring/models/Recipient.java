@@ -15,10 +15,14 @@ public class Recipient {
     @Column(name = "ID")
     private long ID;
 
-    @OneToOne
-    @JoinColumn(name = "sender")
-    private User sender;
+    @Column(name = "sender_ID")
+    private long sender;
 
-    @Column(name = "recipient")
-    String recipientIBAN;
+    @Column(name = "recipient_IBAN")
+    private long recipientIBAN;
+
+    public Recipient(long sender, long recipientIBAN){
+        this.sender = sender;
+        this.recipientIBAN = recipientIBAN;
+    }
 }

@@ -40,8 +40,4 @@ public class User
     private Date DOB;
 
 
-    @OneToMany
-    @JoinColumn(name = "USER_ID")
-    private List<Currency> currency;
-
 }

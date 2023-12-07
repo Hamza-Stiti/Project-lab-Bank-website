@@ -1,5 +1,6 @@
 package com.DigiBankSpring.DigiBankSpring.models;
 
+import com.DigiBankSpring.DigiBankSpring.responses.CurrencyResponce;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +25,11 @@ public class Currency {
 
     public Currency(long user_ID){
         this.User_ID = user_ID;
-        balance = 0;
+        balance = 100000;
     }
+
+    public Currency(){}
+
+    public CurrencyResponce convertToResponse(){ return new CurrencyResponce(IBAN, balance); }
+
 }

@@ -1,17 +1,19 @@
 package com.DigiBankSpring.DigiBankSpring.controllers;
 
 
-import com.DigiBankSpring.DigiBankSpring.requests.CurrencyRequest;
+import com.DigiBankSpring.DigiBankSpring.models.Recipient;
+import com.DigiBankSpring.DigiBankSpring.requests.LoginRequest;
+import com.DigiBankSpring.DigiBankSpring.requests.SendRequest;
+import com.DigiBankSpring.DigiBankSpring.responses.CurrencyResponce;
 import com.DigiBankSpring.DigiBankSpring.security.JwtDecoder;
-import com.DigiBankSpring.DigiBankSpring.services.CurrencyService;
-import com.DigiBankSpring.DigiBankSpring.services.RecipientService;
-import com.DigiBankSpring.DigiBankSpring.services.TransactionService;
 import com.DigiBankSpring.DigiBankSpring.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
+import java.util.Optional;
 
 import static java.lang.Long.parseLong;
 
@@ -22,9 +24,6 @@ public class UserController
 {
     private final JwtDecoder jwtDecoder;
     private final UserService userService;
-    private final CurrencyService currencyService;
-    private final RecipientService recipientService;
-    private final TransactionService transactionService;
 
 
     @GetMapping("/get")
@@ -33,19 +32,26 @@ public class UserController
         return ResponseEntity.ok(userId);
     }
 
-//    @GetMapping("/currencylist")
-//    public ResponseEntity<ArrayList<String>> GetCurrecies(@RequestHeader (name="Authorization") String authHeader){
-//        Long userId = parseLong(jwtDecoder.getUserIdFromAuthHeader(authHeader));
-//        Optional<ArrayList<Currency>> currency = currencyRepository.findByUserID(userId);
-//        if (currency.isEmpty()) return ResponseEntity.badRequest().build();
-//        ArrayList<Currency> result = new ArrayList<>(currency.get());
-//        return ResponseEntity.ok(result);
-//    }
 
-    @PostMapping("/add/currency")
-    public ResponseEntity add(@RequestHeader (name="Authorization") String authHeader, @RequestBody CurrencyRequest request){
+    @GetMapping("/currency")
+    public ResponseEntity<CurrencyResponce> add(@RequestHeader (name="Authorization") String authHeader){
         long userID = jwtDecoder.getUserIdFromAuthHeader(authHeader);
-        return (ResponseEntity) ResponseEntity.status(201);
+        Optional<CurrencyResponce> result = userService.getAccountByUserID(userID);
+        if(result.isEmpty())
+            return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.ok(result.get());
     }
 
+//    @GetMapping("")
+//    public ResponseEntity<List<Recipient>> getRecipients(@RequestHeader (name="Authorization") String authHeader){
+//
+//    }
+
+    @GetMapping("/send")
+    public ResponseEntity<String> SendMoney(@RequestHeader (name="Authorization") String authHeader, @RequestBody SendRequest details){
+        long userId = jwtDecoder.getUserIdFromAuthHeader(authHeader);
+        Optional<String> response = userService.sendMoney(details, userId);
+        if(!response.isEmpty()) return ResponseEntity.badRequest().body(response.get());
+        return ResponseEntity.ok("money sent");
+    }
 }

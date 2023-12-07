@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import ExitIcon from './ExitIcon'
 import Account from './Account'
@@ -11,6 +11,8 @@ import axios from 'axios'
 
 export default function Layout({ }) {
     const [selectedPage, setSelectedPage] = useState("account");
+    const [iban, setIban] = useState();
+    const [amount, setAmount] = useState();
 
     function logout() {
         localStorage.removeItem("token");
@@ -20,11 +22,16 @@ export default function Layout({ }) {
     function getPage() {
         switch (selectedPage) {
             case 'account': return <Account />
-            case 'transactions': return <Transaction />
-            case 'send': return <Send />
-            case 'recipients': return <Recipients />
+            case 'transactions': return <Transaction onResend={(iban, amount) => {setIban(iban); setAmount(amount); setSelectedPage('send')}} />
+            case 'send': return <Send iban={iban} amount={amount} onSend={() => {setIban(undefined); setAmount(undefined)}} />
+            case 'recipients': return <Recipients onSend={iban => {setIban(iban); setSelectedPage('send')}} />
         }
     }
+
+    useEffect(() => {
+        setIban()
+        setAmount()
+    }, [selectedPage])
 
     return (
         <div className="layout-container">

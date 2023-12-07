@@ -132,6 +132,8 @@ button {
 			border-top-left-radius: 0.5rem;
 			border-top-right-radius: 0.5rem;
 			padding: 2rem;
+			height: calc(100vh - 11rem);
+			overflow: auto;
 		}
 
 		aside {
@@ -170,4 +172,57 @@ button {
 			}
 		}
 	}
+}
+
+.balance-card {
+	display: flex;
+	align-items: start;
+	flex-direction: column;
+	gap: 1.5rem;
+	background-color: #eec65986;
+	padding: 1rem 2rem;
+	border-radius: 1.5rem;
+
+	.currency-type {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+
+		p {
+			font-size: 1.5rem;
+			font-weight: 500;
+		}
+	}
+
+	.flag-container {
+		border-radius: 999px;
+		overflow: hidden;
+		width: 2.5rem;
+		height: 2.5rem;
+		aspect-ratio: 1;
+		display: grid;
+		place-content: center;
+	}
+
+	&>p {
+		font-size: 1.5rem;
+
+		span {
+			&:last-of-type {
+				font-weight: 700;
+			}
+		}
+	}
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
 }

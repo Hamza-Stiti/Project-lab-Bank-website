@@ -2,6 +2,7 @@ package com.DigiBankSpring.DigiBankSpring.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "TRANSACTION")
 @Data
+@NoArgsConstructor
 public class Transaction {
 
     @Id
@@ -17,7 +19,6 @@ public class Transaction {
     private long Transfer_Number;
 
     @Column(name = "SENDER_ID") //foreign key from CURRENCY
-    @JoinColumn(name = "SENDER_ID")
     private long sender;
 
     @Column(name = "RECIPIENT_IBAN") //foreign key from CURRENCY
@@ -35,4 +36,6 @@ public class Transaction {
         this.recipientIBAN = recipientIban;
         date = java.time.LocalDate.now();
     }
+
+
 }

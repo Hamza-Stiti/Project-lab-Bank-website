@@ -2,9 +2,11 @@ package com.DigiBankSpring.DigiBankSpring.controllers;
 
 
 import com.DigiBankSpring.DigiBankSpring.models.Recipient;
+import com.DigiBankSpring.DigiBankSpring.models.Transaction;
 import com.DigiBankSpring.DigiBankSpring.requests.LoginRequest;
 import com.DigiBankSpring.DigiBankSpring.requests.SendRequest;
 import com.DigiBankSpring.DigiBankSpring.responses.CurrencyResponce;
+import com.DigiBankSpring.DigiBankSpring.responses.SendMoneyResponse;
 import com.DigiBankSpring.DigiBankSpring.security.JwtDecoder;
 import com.DigiBankSpring.DigiBankSpring.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +28,6 @@ public class UserController
     private final UserService userService;
 
 
-    @GetMapping("/get")
-    public ResponseEntity<Long> User(@RequestHeader (name="Authorization") String authHeader) {
-        long userId = jwtDecoder.getUserIdFromAuthHeader(authHeader);
-        return ResponseEntity.ok(userId);
-    }
-
-
     @GetMapping("/currency")
     public ResponseEntity<CurrencyResponce> add(@RequestHeader (name="Authorization") String authHeader){
         long userID = jwtDecoder.getUserIdFromAuthHeader(authHeader);
@@ -42,16 +37,27 @@ public class UserController
         return ResponseEntity.ok(result.get());
     }
 
-//    @GetMapping("")
-//    public ResponseEntity<List<Recipient>> getRecipients(@RequestHeader (name="Authorization") String authHeader){
-//
-//    }
+    @GetMapping("/transactions")
+    public ResponseEntity<List<Transaction>> getTransactions(@RequestHeader (name="Authorization") String authHeader){
+        long userID = jwtDecoder.getUserIdFromAuthHeader(authHeader);
+        Optional<List<Transaction>> response = userService.getTransactions(userID);
+        if(response.isEmpty()) return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.ok(response.get());
+    }
 
-    @GetMapping("/send")
-    public ResponseEntity<String> SendMoney(@RequestHeader (name="Authorization") String authHeader, @RequestBody SendRequest details){
+    @GetMapping("/recipients")
+    public ResponseEntity<List<Recipient>> getRecipients(@RequestHeader (name="Authorization") String authHeader){
+        long userID = jwtDecoder.getUserIdFromAuthHeader(authHeader);
+        Optional<List<Recipient>> response = userService.getRecipients(userID);
+        if(response.isEmpty()) return ResponseEntity.badRequest().body(null);
+        return ResponseEntity.ok(response.get());
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<SendMoneyResponse> SendMoney(@RequestHeader (name="Authorization") String authHeader, @RequestBody SendRequest details){
         long userId = jwtDecoder.getUserIdFromAuthHeader(authHeader);
         Optional<String> response = userService.sendMoney(details, userId);
-        if(!response.isEmpty()) return ResponseEntity.badRequest().body(response.get());
-        return ResponseEntity.ok("money sent");
+        if(!response.isEmpty()) return ResponseEntity.badRequest().body(SendMoneyResponse.builder().success(false).error(response.get()).build());
+        return ResponseEntity.ok(SendMoneyResponse.builder().success(true).build());
     }
 }

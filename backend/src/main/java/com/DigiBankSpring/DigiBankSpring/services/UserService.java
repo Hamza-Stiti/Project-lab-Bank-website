@@ -66,9 +66,21 @@ public class UserService
         transactionRepository.save(new Transaction(userID, details.getAmount(), details.getIBAN()));
         currencyRepository.updateRecipientBalance(details.getAmount(), details.getIBAN());
         currencyRepository.updateSenderBalance(details.getAmount(), userID);
-        if(recipientRepository.findByUserIDandRecipientIBAN(userID, details.getIBAN()).isEmpty())
+        if(recipientRepository.findBySenderIDAndRecipientIBAN(userID, details.getIBAN()).isEmpty())
             recipientRepository.save(new Recipient(userID, details.getIBAN()));
 
         return Optional.empty();
+    }
+
+    public Optional<List<Transaction>> getTransactions(long userID) {
+        List<Transaction> QuerryResult = transactionRepository.findBySenderID(userID);
+        if(QuerryResult.isEmpty()) return Optional.empty();
+        return Optional.of(QuerryResult);
+    }
+
+    public Optional<List<Recipient>> getRecipients(long userID) {
+        List<Recipient> QuerryResult = recipientRepository.findBySenderID(userID);
+        if(QuerryResult.isEmpty()) return Optional.empty();
+        return Optional.of(QuerryResult);
     }
 }

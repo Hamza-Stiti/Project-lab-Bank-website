@@ -3,10 +3,12 @@ package com.DigiBankSpring.DigiBankSpring.models;
 import com.DigiBankSpring.DigiBankSpring.responses.CurrencyResponce;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "CURRENCY")
 @Data
+@NoArgsConstructor
 public class Currency {
 
     @Id
@@ -27,8 +29,6 @@ public class Currency {
         this.User_ID = user_ID;
         balance = 100000;
     }
-
-    public Currency(){}
 
     public CurrencyResponce convertToResponse(){ return new CurrencyResponce(IBAN, balance); }
 

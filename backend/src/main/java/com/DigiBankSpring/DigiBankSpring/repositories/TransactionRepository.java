@@ -1,7 +1,5 @@
 package com.DigiBankSpring.DigiBankSpring.repositories;
 
-import com.DigiBankSpring.DigiBankSpring.models.Currency;
-import com.DigiBankSpring.DigiBankSpring.models.Recipient;
 import com.DigiBankSpring.DigiBankSpring.models.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query(value = "select * FROM CURRENCY WHERE Recipient.USER_ID = :USER_ID", nativeQuery = true)
-    List<Recipient> findByUserID(@Param("USER_ID") Long UserID);
+    @Query(value = "select * FROM TRANSACTION WHERE TRANSACTION.SENDER_ID = :USER_ID", nativeQuery = true)
+    List<Transaction> findBySenderID(@Param("USER_ID") Long UserID);
 }
